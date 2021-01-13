@@ -39,12 +39,15 @@ setdiff(mfi_bissau$MktNametext, GNB1$MktNametext)
 setdiff(GNB1$MktNametext, mfi_bissau$MktNametext)
 
 # différence admin2code entre mfi_bissau et 
+setdiff(mfi_bissau2$ADMIN2Name,GNB1$ADMIN2Name)
 
 # quelques ajustement supplémentaire --------------------------------------
 
 which(is.na(mfi_bissau2$MktNametext))
-
 vide <- mfi_bissau[which(is.na(mfi_bissau$MktNametext)),]
+
+
+
 # Partie Recherche V ------------------------------------------------------
 
 GNB2 <- GNB2 %>% mutate(
