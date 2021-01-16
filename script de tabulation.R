@@ -27,27 +27,36 @@ d <- d %>% rownames_to_column()
 
 # Assortiment -------------------------------------------------------------
 # UOASoldGroup_FCer  Selectionnez tous les types de produits alimentaires de céréales habituellement vendus
-# UOASoldGroup_FOth-fo1 Selectionnez tous les types de Produits Alimentaires Autres habituellement vendus
-# UOASoldGroup_NF-nf1  Selectionnez tous les types de produits non alimentaires Habituelement vendu
+# UOASoldGroup_FOth-fo Selectionnez tous les types de Produits Alimentaires Autres habituellement vendus
+# UOASoldGroup_NF-nf  Selectionnez tous les types de produits non alimentaires Habituelement vendu
 
-mfi_bissau <- mutate_at(mfi_bissau, vars(contains("UOASoldGroup_FCer-fc")), funs(factor))
-mfi_bissau <- mutate_at(mfi_bissau, vars(contains("UOASoldGroup_FCer-fc")), ~recode_factor(.,"0"="Non", "1"="Oui"))
+mfi_bissau <- mutate_at(mfi_bissau, 
+                        vars(contains(c("UOASoldGroup_FCer-fc","UOASoldGroup_FOth-fo","UOASoldGroup_NF-nf"))), 
+                        funs(factor))
+mfi_bissau <- mutate_at(mfi_bissau, 
+                        vars(contains(c("UOASoldGroup_FCer-fc","UOASoldGroup_FOth-fo","UOASoldGroup_NF-nf"))),
+                        ~recode_factor(.,"0"="Non", "1"="Oui"))
 
-# selectionnez les types de produits qui sont habituellement vendus 
+# toutes les variables
+colonne <- colnames(mfi_bissau)
+
+# selectionnez les types de produits qui sont habituellement vendus UOASoldGroup_FCer-fc
 Assortiment1 <- list()
+Assortiment2 <- list()
+Assortiment3 <- list()
+
 for (i in 1:length(colonne)) {
-  if(str_detect(colonne[i], "UOASoldGroup_FCer-fc") )
+  if(str_detect(colonne[i], "UOASoldGroup_FCer-fc") ){
     Assortiment1 <- append(Assortiment1, colonne[i])
-  
+  }
+  else if (str_detect(colonne[i], "UOASoldGroup_FOth-fo")) {
+    Assortiment2 <- append(Assortiment2, colonne[i])
+  }
+  else if(str_detect(colonne[i], "UOASoldGroup_NF-nf")) {
+    Assortiment3 <- append(Assortiment3, colonne[i])
+  }
 }
 
-# 
-Assortiment2 <- list()
-for (i in 1:length(colonne)) {
-  if(str_detect(colonne[i], "UOASoldGroup_FCer-fc") )
-    Assortiment2 <- append(Assortiment2, colonne[i])
-  
-}
 
 df_list <- map(Assortiment, ~ tableau(mfi_bissau, !!sym(.x)))
 names(df_list) <- Assortiment
