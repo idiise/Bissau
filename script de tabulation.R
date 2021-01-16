@@ -22,21 +22,26 @@ mfi_bissau <- read_xlsx("mfi_bissau.xlsx")
 spss <- read_sav("data_mfi_beta.sav")
 spss <- to_factor(spss)
 d <- var_label(spss)
-d <- pluck(d)
 d <- as.data.frame(do.call(rbind,d))
 d <- d %>% rownames_to_column()
 
 # Assortiment -------------------------------------------------------------
+# UOASoldGroup_FCer  Selectionnez tous les types de produits alimentaires de céréales habituellement vendus
+# UOASoldGroup_FOth-fo1 Selectionnez tous les types de Produits Alimentaires Autres habituellement vendus
+# UOASoldGroup_NF-nf1  Selectionnez tous les types de produits non alimentaires Habituelement vendu
 
 mfi_bissau <- mutate_at(mfi_bissau, vars(contains("UOASoldGroup_FCer-fc")), funs(factor))
 mfi_bissau <- mutate_at(mfi_bissau, vars(contains("UOASoldGroup_FCer-fc")), ~recode_factor(.,"0"="Non", "1"="Oui"))
 
+# selectionnez les types de produits qui sont habituellement vendus 
 Assortiment1 <- list()
 for (i in 1:length(colonne)) {
   if(str_detect(colonne[i], "UOASoldGroup_FCer-fc") )
     Assortiment1 <- append(Assortiment1, colonne[i])
   
 }
+
+# 
 Assortiment2 <- list()
 for (i in 1:length(colonne)) {
   if(str_detect(colonne[i], "UOASoldGroup_FCer-fc") )
@@ -48,7 +53,7 @@ df_list <- map(Assortiment, ~ tableau(mfi_bissau, !!sym(.x)))
 names(df_list) <- Assortiment
 list2env(df_list, envir = .GlobalEnv)
 
-nom <- map(disponibilite,~str_replace(.x, "-","."))
+nom <- map(Assortiment1,~str_replace(.x, "-","."))
 d[which(d$rowname%in%nom),]
 
 sheet_names <- excel_sheets("Disponibilité/Assortiment.xlsx")
