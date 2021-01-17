@@ -21,14 +21,15 @@ nomfichier2 <- read_xlsx("nomfichier2.xlsx")
 mfi_bissau <- read_xlsx("mfi_bissau.xlsx")
 spss <- read_sav("data_mfi_beta.sav")
 spss <- to_factor(spss)
-d <- var_label(spss)
-d <- as.data.frame(do.call(rbind,d))
-d <- d %>% rownames_to_column()
+codebook <- var_label(spss)
+codebook <- as.data.frame(do.call(rbind,codebook))
+codebook <- codebook %>% rownames_to_column()
 
 # Assortiment -------------------------------------------------------------
 # UOASoldGroup_FCer  Selectionnez tous les types de produits alimentaires de céréales habituellement vendus
 # UOASoldGroup_FOth-fo Selectionnez tous les types de Produits Alimentaires Autres habituellement vendus
 # UOASoldGroup_NF-nf  Selectionnez tous les types de produits non alimentaires Habituelement vendu
+
 
 mfi_bissau <- mutate_at(mfi_bissau, 
                         vars(contains(c("UOASoldGroup_FCer-fc","UOASoldGroup_FOth-fo","UOASoldGroup_NF-nf"))), 
@@ -56,6 +57,7 @@ for (i in 1:length(colonne)) {
     Assortiment3 <- append(Assortiment3, colonne[i])
   }
 }
+Assortiment <- list(Assortiment1,Assortiment2,Assortiment3)
 
 
 df_list <- map(Assortiment, ~ tableau(mfi_bissau, !!sym(.x)))
@@ -104,24 +106,43 @@ for (i in 1:nb_sheets){
 
 
 # Fonction de tabulation --------------------------------------------------
+# TrdNodDensLocNameAdm0 Niveau Admin0
+# TrdNodDensLocNameAdm1 Niveau Admin1
+# TrdNodDensLocNameAdm2 Niveau Admin2
 
-tableau <- function(d,colonne){
+tableauMarche <- function(d,colonne){
   d <- mfi_bissau %>% tabyl(MktNametext, {{colonne}},show_na = TRUE) %>% 
     adorn_totals(where = c("col")) %>%
     adorn_percentages(denominator = "row") %>% 
     adorn_pct_formatting(digits = 0)
   d <- d %>% mutate(
-    Admin2name = VLOOKUP(.lookup_values = MktNametext,.data = marche,.lookup_column = MarketName,.return_column = Adm2Name)
+    Admin2name = VLOOKUP(.lookup_values = MktNametext,.data = mfi_bissau,.lookup_column = MktNametext,.return_column = TrdNodDensLocNameAdm2)
   )
   d <- d %>% mutate(
-    Admin1name = VLOOKUP(.lookup_values = MktNametext,.data = marche,.lookup_column = MarketName,.return_column = Adm1Name)
+    Admin1name = VLOOKUP(.lookup_values = MktNametext,.data = mfi_bissau,.lookup_column = MktNametext,.return_column = TrdNodDensLocNameAdm1)
   )
   d <- d %>% relocate(Admin2name,.before = MktNametext)
   d <- d %>% relocate(Admin1name,.before = Admin2name)
   
 }
 
+tableauAdmin1 <- function(d,colonne){
+  d <- mfi_bissau %>% tabyl(TrdNodDensLocNameAdm1, {{colonne}},show_na = TRUE) %>% 
+    adorn_totals(where = c("col")) %>%
+    adorn_percentages(denominator = "row") %>% 
+    adorn_pct_formatting(digits = 0)
+}
 
+tableauAdmin2 <- function(d, colonne){
+  d <- mfi_bissau %>% tabyl(TrdNodDensLocNameAdm1, {{colonne}},show_na = TRUE) %>% 
+    adorn_totals(where = c("col")) %>%
+    adorn_percentages(denominator = "row") %>% 
+    adorn_pct_formatting(digits = 0)
+  d <- d %>% mutate(
+    Admin1name = VLOOKUP(.lookup_values = MktNametext,.data = mfi_bissau,.lookup_column = MktNametext,.return_column = TrdNodDensLocNameAdm1)
+  )
+  d <- d %>% relocate(Admin1name,.before = Admin2name)
+}
 # Fonction de sauvegarde --------------------------------------------------
 
 
