@@ -60,9 +60,10 @@ for (i in 1:length(colonne)) {
 Assortiment <- list(Assortiment1,Assortiment2,Assortiment3)
 
 
-df_list <- map(Assortiment, ~ tableau(mfi_bissau, !!sym(.x)))
-names(df_list) <- Assortiment
-list2env(df_list, envir = .GlobalEnv)
+df_listAssotiment1 <- map(Assortiment1, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+names(df_listAssotiment1) <- Assortiment1
+BaseAssortiment1 <- map_df(df_listAssotiment1, ~as.data.frame(.x), .id = "id") 
+# list2env(df_list, envir = .GlobalEnv)
 
 nom <- map(Assortiment1,~str_replace(.x, "-","."))
 d[which(d$rowname%in%nom),]
@@ -123,7 +124,6 @@ tableauMarche <- function(d,colonne){
   )
   d <- d %>% relocate(Admin2name,.before = MktNametext)
   d <- d %>% relocate(Admin1name,.before = Admin2name)
-  
 }
 
 tableauAdmin1 <- function(d,colonne){
