@@ -14,10 +14,10 @@ library(rlist)
 library(openxlsx)
 # Import Dataset ----------------------------------------------------------
 
-GNB1 <-  read.csv("GNB_MFI_Dataset_September_2020.csv")
-GNB2 <- read_xlsx("GNB_MFI_Dataset_September_2020_v2.xlsx")
-marche <- read_xlsx("Marche_Bissau.xlsx")
-nomfichier2 <- read_xlsx("nomfichier2.xlsx")
+# GNB1 <-  read.csv("GNB_MFI_Dataset_September_2020.csv")
+# GNB2 <- read_xlsx("GNB_MFI_Dataset_September_2020_v2.xlsx")
+# marche <- read_xlsx("Marche_Bissau.xlsx")
+# nomfichier2 <- read_xlsx("nomfichier2.xlsx")
 mfi_bissau <- read_xlsx("mfi_bissau.xlsx")
 spss <- read_sav("data_mfi_beta.sav")
 spss <- to_factor(spss)
@@ -57,13 +57,38 @@ for (i in 1:length(colonne)) {
     Assortiment3 <- append(Assortiment3, colonne[i])
   }
 }
-Assortiment <- list(Assortiment1,Assortiment2,Assortiment3)
+# Remplacer le separateur pour avoir une correspondance avec les libellés de la base spsss
+# Assortiment1 <- map(Assortiment1,~str_replace(.x, "-","."))
+# Assortiment2 <- map(Assortiment2,~str_replace(.x, "-","."))
+# Assortiment3 <- map(Assortiment3,~str_replace(.x, "-","."))
 
-
+# base assortiment1
 df_listAssotiment1 <- map(Assortiment1, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 names(df_listAssotiment1) <- Assortiment1
 BaseAssortiment1 <- map_df(df_listAssotiment1, ~as.data.frame(.x), .id = "id") 
 # list2env(df_list, envir = .GlobalEnv)
+# Base assortiment2
+df_listAssotiment2 <- map(Assortiment2, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+names(df_listAssotiment2) <- Assortiment2
+BaseAssortiment2 <- map_df(df_listAssotiment2, ~as.data.frame(.x), .id = "id") 
+# base3 assortiment
+df_listAssotiment3 <- map(Assortiment3, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+names(df_listAssotiment3) <- Assortiment3
+BaseAssortiment3 <- map_df(df_listAssotiment3, ~as.data.frame(.x), .id = "id") 
+
+BaseAssortiment <- BaseAssortiment1 %>%
+                   bind_rows(BaseAssortiment2, BaseAssortiment3)
+
+#  changer le nom des variables de SPSS
+
+codebook$rowname <- str_replace(codebook$rowname,"UOASoldGroup_FCer.fc","UOASoldGroup_FCer-fc")
+codebook$rowname <- str_replace(codebook$rowname,"UOASoldGroup_FOth.fo","UOASoldGroup_FOth-fo")
+codebook$rowname <- str_replace(codebook$rowname,"UOASoldGroup_NF.nf","UOASoldGroup_NF-nf")
+
+BaseAssortimentAdmin1 <- BaseAssortiment %>% mutate(
+  modalite = VLOOKUP(.lookup_values = id, .data = codebook, .lookup_column = rowname,.return_column = V1)
+)
+
 
 nom <- map(Assortiment1,~str_replace(.x, "-","."))
 d[which(d$rowname%in%nom),]
