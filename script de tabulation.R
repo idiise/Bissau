@@ -247,11 +247,82 @@ BaseDisponibiliteAdmin1 <- BaseDisponibiliteAdmin1 %>% select(id,TrdNodDensLocNa
   rename(ADMIN1NAME = TrdNodDensLocNameAdm1)
 
 # Disponibilté au niveau admin2 -------------------------------------------
+# Base disponibilité1
+df_listDisponibilite1 <- map(Disponibilite1, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite1) <- Disponibilite1
+BaseDisponibilite1 <- map_df(df_listDisponibilite1, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable ="Ya t-il des produits rares dans le marché") 
+# list2env(df_list, envir = .GlobalEnv)
+# Base disponibilité2
+df_listDisponibilite2 <- map(Disponibilite2, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite2) <- Disponibilite2
+BaseDisponibilite2 <- map_df(df_listDisponibilite2, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Produits alimentaire de céréales")
+# Base disponibilité3
+df_listDisponibilite3 <- map(Disponibilite3, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite3) <- Disponibilite3
+BaseDisponibilite3 <- map_df(df_listDisponibilite3, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Produits alimentaires Autres")
+# Base disponibilité4
+df_listDisponibilite4 <- map(Disponibilite4, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite4) <- Disponibilite4
+BaseDisponibilite4 <- map_df(df_listDisponibilite4, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Produits Non alimentaires")
 
 
+BaseDisponibilite <- BaseDisponibilite1 %>%
+  bind_rows(BaseDisponibilite2, BaseDisponibilite3,BaseDisponibilite4)
+
+BaseDisponibilite <- BaseDisponibilite %>% left_join(TableDeRechercheAdmin2,by = "TrdNodDensLocNameAdm2")
+
+
+#  Ajout des libellés
+BaseDisponibiliteAdmin2 <- BaseDisponibilite %>% mutate(
+  modalite = VLOOKUP(.lookup_values = id, .data = codebook, .lookup_column = rowname,.return_column = V1)
+)
+
+BaseDisponibiliteAdmin2 <- BaseDisponibiliteAdmin2 %>% select(id,TrdNodDensLocNameAdm1,
+                                                          TrdNodDensLocNameAdm2,variable,modalite,everything()) %>% 
+  rename(ADMIN1NAME =TrdNodDensLocNameAdm1, ADMIN2NAME = TrdNodDensLocNameAdm2)
+# 
 # Disponibilité au niveau marché ------------------------------------------
+# Base disponibilité1
+df_listDisponibilite1 <- map(Disponibilite1, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite1) <- Disponibilite1
+BaseDisponibilite1 <- map_df(df_listDisponibilite1, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable ="Ya t-il des produits rares dans le marché") 
+# list2env(df_list, envir = .GlobalEnv)
+# Base disponibilité2
+df_listDisponibilite2 <- map(Disponibilite2, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite2) <- Disponibilite2
+BaseDisponibilite2 <- map_df(df_listDisponibilite2, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Produits alimentaire de céréales")
+# Base disponibilité3
+df_listDisponibilite3 <- map(Disponibilite3, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite3) <- Disponibilite3
+BaseDisponibilite3 <- map_df(df_listDisponibilite3, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Produits alimentaires Autres")
+# Base disponibilité4
+df_listDisponibilite4 <- map(Disponibilite4, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite4) <- Disponibilite4
+BaseDisponibilite4 <- map_df(df_listDisponibilite4, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Produits Non alimentaires")
 
 
+BaseDisponibilite <- BaseDisponibilite1 %>%
+  bind_rows(BaseDisponibilite2, BaseDisponibilite3,BaseDisponibilite4)
+
+BaseDisponibilite <- BaseDisponibilite %>% left_join(TableDeRechercheMarche,by = "MktNametext")
+
+
+#  Ajout des libellés
+BaseDisponibiliteMarche <- BaseDisponibilite %>% mutate(
+  modalite = VLOOKUP(.lookup_values = id, .data = codebook, .lookup_column = rowname,.return_column = V1)
+)
+
+BaseDisponibiliteMarche <- BaseDisponibiliteMarche %>% select(id,TrdNodDensLocNameAdm1,TrdNodDensLocNameAdm2,
+                                                          MktNametext,variable,modalite,everything()) %>% 
+  rename(ADMIN1NAME =TrdNodDensLocNameAdm1, ADMIN2NAME = TrdNodDensLocNameAdm2)
 
 
 
