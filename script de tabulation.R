@@ -163,28 +163,42 @@ BaseAssortimentMarche <- BaseAssortimentMarche %>% select(id,TrdNodDensLocNameAd
 
 
 # Disponibilté ------------------------------------------------------------
+# B1
 # UOAAvailScarce_Gr- -- Ya t-il des produits rares dans le marché
-# UOAAvailScarce_FCer-fc -- Produits alimentaire de céréales
-# UOAAvailScarce_FOth-fo Produits alimentaires Autres
-# UOAAvailScarce_NF-nf Produits Non alimentaires
-
-#  "UOAAvailScarce_Gr.1", "UOAAvailScarce_Gr-1"
-# UOAAvailScarce_FCer.fc1
-
+# UOAAvailScarce_FCer-fc -- Produits alimentaire de céréales rares
+# UOAAvailScarce_FOth-fo --Produits alimentaires Autres rares
+# UOAAvailScarce_NF-nf --Produits Non alimentaires rares
+# B2
+# TrdAvailRunout_Gr- --Avez-vous peur de manquer de stocks d'ici une semaine en ce qui concerne
+# B2
+# MktAvailRunout_Gr- --Les commerçants de ce marché ont-ils peur de manquer de stocks d'ici 1e semaine en ce qui concerne
+# UOAAvailRunout_FCer-fc -- Manque de stocks de produits alimentaires de céréales d'ici une semaine
+# UOAAvailRunout_FOth-fo --  Manque de Stock d'autres prosuits alimentaires d'ici une semaine
+# UOAAvailRunout_NF-nf   --  Manque de Stock de produits Nom alimentaires d'ici une semaine
 mfi_bissau <- mutate_at(mfi_bissau, 
                         vars(contains(c("UOAAvailScarce_Gr-","UOAAvailScarce_FCer-fc",
-                        "UOAAvailScarce_FOth-fo","UOAAvailScarce_NF-nf"))), 
+                        "UOAAvailScarce_FOth-fo","UOAAvailScarce_NF-nf","TrdAvailRunout_Gr-",
+                        "MktAvailRunout_Gr-","UOAAvailRunout_FCer-fc",
+                        "UOAAvailRunout_FOth-fo","UOAAvailRunout_NF-nf"))), 
                         funs(factor))
 
 mfi_bissau <- mutate_at(mfi_bissau, 
                         vars(contains(c("UOAAvailScarce_Gr-","UOAAvailScarce_FCer-fc",
-                                        "UOAAvailScarce_FOth-fo","UOAAvailScarce_NF-nf"))),
+                                        "UOAAvailScarce_FOth-fo","UOAAvailScarce_NF-nf","TrdAvailRunout_Gr-",
+                                        "MktAvailRunout_Gr-","UOAAvailRunout_FCer-fc",
+                                        "UOAAvailRunout_FOth-fo","UOAAvailRunout_NF-nf"))),
                         ~recode_factor(.,"0"="Non", "1"="Oui"))
 
 codebook$rowname <- str_replace(codebook$rowname,"UOAAvailScarce_Gr.", "UOAAvailScarce_Gr-")
 codebook$rowname <- str_replace(codebook$rowname,"UOAAvailScarce_FCer.fc","UOAAvailScarce_FCer-fc")
 codebook$rowname <- str_replace(codebook$rowname,"UOAAvailScarce_FOth.fo","UOAAvailScarce_FOth-fo")
 codebook$rowname <- str_replace(codebook$rowname,"UOAAvailScarce_NF.nf","UOAAvailScarce_NF-nf")
+codebook$rowname <- str_replace(codebook$rowname,"TrdAvailRunout_Gr.","TrdAvailRunout_Gr-")
+codebook$rowname <- str_replace(codebook$rowname,"MktAvailRunout_Gr.","MktAvailRunout_Gr-")
+codebook$rowname <- str_replace(codebook$rowname,"UOAAvailRunout_FCer.fc.","UOAAvailRunout_FCer-fc")
+codebook$rowname <- str_replace(codebook$rowname,"UOAAvailRunout_FOth.fo","UOAAvailRunout_FOth-fo")
+codebook$rowname <- str_replace(codebook$rowname,"UOAAvailRunout_NF.nf","UOAAvailRunout_NF-nf")
+
 
 # toutes les variables
 colonne <- colnames(mfi_bissau)
@@ -194,6 +208,12 @@ Disponibilite1 <- list()
 Disponibilite2 <- list()
 Disponibilite3 <- list()
 Disponibilite4 <- list()
+Disponibilite5 <- list()
+Disponibilite6 <- list()
+Disponibilite7 <- list()
+Disponibilite8 <- list()
+Disponibilite9 <- list()
+
 
 for (i in 1:length(colonne)) {
   if(str_detect(colonne[i], "UOAAvailScarce_Gr-") ){
@@ -206,6 +226,16 @@ for (i in 1:length(colonne)) {
     Disponibilite3 <- append(Disponibilite3, colonne[i])
   }else if(str_detect(colonne[i], "UOAAvailScarce_NF-nf")){
     Disponibilite4 <- append(Disponibilite4, colonne[i])
+  }else if(str_detect(colonne[i], "TrdAvailRunout_Gr-")){
+    Disponibilite5 <- append(Disponibilite5, colonne[i])
+  }else if(str_detect(colonne[i], "MktAvailRunout_Gr-")){
+    Disponibilite6 <- append(Disponibilite6, colonne[i])
+  }else if(str_detect(colonne[i], "UOAAvailRunout_FCer-fc")){
+    Disponibilite7 <- append(Disponibilite7, colonne[i])
+  }else if(str_detect(colonne[i], "UOAAvailRunout_FOth-fo")){
+    Disponibilite8 <- append(Disponibilite8, colonne[i])
+  }else if(str_detect(colonne[i], "UOAAvailRunout_NF-nf")){
+    Disponibilite9 <- append(Disponibilite9, colonne[i])
   }
 }
 
@@ -222,21 +252,46 @@ BaseDisponibilite1 <- map_df(df_listDisponibilite1, ~as.data.frame(.x), .id = "i
 df_listDisponibilite2 <- map(Disponibilite2, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 names(df_listDisponibilite2) <- Disponibilite2
 BaseDisponibilite2 <- map_df(df_listDisponibilite2, ~as.data.frame(.x), .id = "id") %>% 
-  mutate(variable = "Produits alimentaire de céréales")
+  mutate(variable = "Produits alimentaire de céréales rares")
 # Base disponibilité3
 df_listDisponibilite3 <- map(Disponibilite3, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 names(df_listDisponibilite3) <- Disponibilite3
 BaseDisponibilite3 <- map_df(df_listDisponibilite3, ~as.data.frame(.x), .id = "id") %>% 
-  mutate(variable = "Produits alimentaires Autres")
+  mutate(variable = "Produits alimentaires Autres rares")
 # Base disponibilité4
 df_listDisponibilite4 <- map(Disponibilite4, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 names(df_listDisponibilite4) <- Disponibilite4
 BaseDisponibilite4 <- map_df(df_listDisponibilite4, ~as.data.frame(.x), .id = "id") %>% 
-  mutate(variable = "Produits Non alimentaires")
-
+  mutate(variable = "Produits Non alimentaires  rares")
+# Base disponibilité5
+df_listDisponibilite5 <- map(Disponibilite5, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite5) <- Disponibilite5
+BaseDisponibilite5 <- map_df(df_listDisponibilite5, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Avez-vous peur de manquer de stocks d'ici une semaine en ce qui concerne")
+# Base disponibilité6
+df_listDisponibilite6 <- map(Disponibilite6, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite6) <- Disponibilite6
+BaseDisponibilite6 <- map_df(df_listDisponibilite6, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Les commerçants de ce marché ont-ils peur de manquer de stocks d'ici 1e semaine en ce qui concerne")
+# Base disponibilité7
+df_listDisponibilite7 <- map(Disponibilite7, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite7) <- Disponibilite7
+BaseDisponibilite7 <- map_df(df_listDisponibilite7, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Manque de stocks de produits alimentaires de céréales d'ici une semaine")
+# Base disponibilité8
+df_listDisponibilite8 <- map(Disponibilite8, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite8) <- Disponibilite8
+BaseDisponibilite8 <- map_df(df_listDisponibilite8, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Manque de Stock d'autres produits alimentaires d'ici une semaine")
+# Base disponibilité9
+df_listDisponibilite9 <- map(Disponibilite9, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite9) <- Disponibilite9
+BaseDisponibilite9 <- map_df(df_listDisponibilite9, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Manque de Stock de produits Nom alimentaires d'ici une semaine")
 
 BaseDisponibilite <- BaseDisponibilite1 %>%
-  bind_rows(BaseDisponibilite2, BaseDisponibilite3,BaseDisponibilite4)
+  bind_rows(BaseDisponibilite2, BaseDisponibilite3,BaseDisponibilite4,BaseDisponibilite5,
+            BaseDisponibilite6,BaseDisponibilite7,BaseDisponibilite8,BaseDisponibilite9)
 
 #  Ajout des libellés
 BaseDisponibiliteAdmin1 <- BaseDisponibilite %>% mutate(
@@ -253,25 +308,51 @@ names(df_listDisponibilite1) <- Disponibilite1
 BaseDisponibilite1 <- map_df(df_listDisponibilite1, ~as.data.frame(.x), .id = "id") %>% 
   mutate(variable ="Ya t-il des produits rares dans le marché") 
 # list2env(df_list, envir = .GlobalEnv)
-# Base disponibilité2
+#Base disponibilité2
 df_listDisponibilite2 <- map(Disponibilite2, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
 names(df_listDisponibilite2) <- Disponibilite2
 BaseDisponibilite2 <- map_df(df_listDisponibilite2, ~as.data.frame(.x), .id = "id") %>% 
-  mutate(variable = "Produits alimentaire de céréales")
+  mutate(variable = "Produits alimentaire de céréales rares")
 # Base disponibilité3
 df_listDisponibilite3 <- map(Disponibilite3, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
 names(df_listDisponibilite3) <- Disponibilite3
 BaseDisponibilite3 <- map_df(df_listDisponibilite3, ~as.data.frame(.x), .id = "id") %>% 
-  mutate(variable = "Produits alimentaires Autres")
+  mutate(variable = "Produits alimentaires Autres rares")
 # Base disponibilité4
 df_listDisponibilite4 <- map(Disponibilite4, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
 names(df_listDisponibilite4) <- Disponibilite4
 BaseDisponibilite4 <- map_df(df_listDisponibilite4, ~as.data.frame(.x), .id = "id") %>% 
-  mutate(variable = "Produits Non alimentaires")
+  mutate(variable = "Produits Non alimentaires  rares")
+# Base disponibilité5
+df_listDisponibilite5 <- map(Disponibilite5, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite5) <- Disponibilite5
+BaseDisponibilite5 <- map_df(df_listDisponibilite5, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Avez-vous peur de manquer de stocks d'ici une semaine en ce qui concerne")
+# Base disponibilité6
+df_listDisponibilite6 <- map(Disponibilite6, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite6) <- Disponibilite6
+BaseDisponibilite6 <- map_df(df_listDisponibilite6, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Les commerçants de ce marché ont-ils peur de manquer de stocks d'ici 1e semaine en ce qui concerne")
+# Base disponibilité7
+df_listDisponibilite7 <- map(Disponibilite7, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite7) <- Disponibilite7
+BaseDisponibilite7 <- map_df(df_listDisponibilite7, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Manque de stocks de produits alimentaires de céréales d'ici une semaine")
+# Base disponibilité8
+df_listDisponibilite8 <- map(Disponibilite8, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite8) <- Disponibilite8
+BaseDisponibilite8 <- map_df(df_listDisponibilite8, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Manque de Stock d'autres produits alimentaires d'ici une semaine")
+# Base disponibilité9
+df_listDisponibilite9 <- map(Disponibilite9, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite9) <- Disponibilite9
+BaseDisponibilite9 <- map_df(df_listDisponibilite9, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Manque de Stock de produits Nom alimentaires d'ici une semaine")
 
 
 BaseDisponibilite <- BaseDisponibilite1 %>%
-  bind_rows(BaseDisponibilite2, BaseDisponibilite3,BaseDisponibilite4)
+  bind_rows(BaseDisponibilite2, BaseDisponibilite3,BaseDisponibilite4,BaseDisponibilite5,
+            BaseDisponibilite6,BaseDisponibilite7,BaseDisponibilite8,BaseDisponibilite9)
 
 BaseDisponibilite <- BaseDisponibilite %>% left_join(TableDeRechercheAdmin2,by = "TrdNodDensLocNameAdm2")
 
@@ -292,25 +373,51 @@ names(df_listDisponibilite1) <- Disponibilite1
 BaseDisponibilite1 <- map_df(df_listDisponibilite1, ~as.data.frame(.x), .id = "id") %>% 
   mutate(variable ="Ya t-il des produits rares dans le marché") 
 # list2env(df_list, envir = .GlobalEnv)
-# Base disponibilité2
+#Base disponibilité2
 df_listDisponibilite2 <- map(Disponibilite2, ~ tableauMarche(mfi_bissau, !!sym(.x)))
 names(df_listDisponibilite2) <- Disponibilite2
 BaseDisponibilite2 <- map_df(df_listDisponibilite2, ~as.data.frame(.x), .id = "id") %>% 
-  mutate(variable = "Produits alimentaire de céréales")
+  mutate(variable = "Produits alimentaire de céréales rares")
 # Base disponibilité3
 df_listDisponibilite3 <- map(Disponibilite3, ~ tableauMarche(mfi_bissau, !!sym(.x)))
 names(df_listDisponibilite3) <- Disponibilite3
 BaseDisponibilite3 <- map_df(df_listDisponibilite3, ~as.data.frame(.x), .id = "id") %>% 
-  mutate(variable = "Produits alimentaires Autres")
+  mutate(variable = "Produits alimentaires Autres rares")
 # Base disponibilité4
 df_listDisponibilite4 <- map(Disponibilite4, ~ tableauMarche(mfi_bissau, !!sym(.x)))
 names(df_listDisponibilite4) <- Disponibilite4
 BaseDisponibilite4 <- map_df(df_listDisponibilite4, ~as.data.frame(.x), .id = "id") %>% 
-  mutate(variable = "Produits Non alimentaires")
+  mutate(variable = "Produits Non alimentaires  rares")
+# Base disponibilité5
+df_listDisponibilite5 <- map(Disponibilite5, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite5) <- Disponibilite5
+BaseDisponibilite5 <- map_df(df_listDisponibilite5, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Avez-vous peur de manquer de stocks d'ici une semaine en ce qui concerne")
+# Base disponibilité6
+df_listDisponibilite6 <- map(Disponibilite6, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite6) <- Disponibilite6
+BaseDisponibilite6 <- map_df(df_listDisponibilite6, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Les commerçants de ce marché ont-ils peur de manquer de stocks d'ici 1e semaine en ce qui concerne")
+# Base disponibilité7
+df_listDisponibilite7 <- map(Disponibilite7, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite7) <- Disponibilite7
+BaseDisponibilite7 <- map_df(df_listDisponibilite7, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Manque de stocks de produits alimentaires de céréales d'ici une semaine")
+# Base disponibilité8
+df_listDisponibilite8 <- map(Disponibilite8, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite8) <- Disponibilite8
+BaseDisponibilite8 <- map_df(df_listDisponibilite8, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Manque de Stock d'autres produits alimentaires d'ici une semaine")
+# Base disponibilité9
+df_listDisponibilite9 <- map(Disponibilite9, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listDisponibilite9) <- Disponibilite9
+BaseDisponibilite9 <- map_df(df_listDisponibilite9, ~as.data.frame(.x), .id = "id") %>% 
+  mutate(variable = "Manque de Stock de produits Nom alimentaires d'ici une semaine")
 
 
 BaseDisponibilite <- BaseDisponibilite1 %>%
-  bind_rows(BaseDisponibilite2, BaseDisponibilite3,BaseDisponibilite4)
+  bind_rows(BaseDisponibilite2, BaseDisponibilite3,BaseDisponibilite4,BaseDisponibilite5,
+            BaseDisponibilite6,BaseDisponibilite7,BaseDisponibilite8,BaseDisponibilite9)
 
 BaseDisponibilite <- BaseDisponibilite %>% left_join(TableDeRechercheMarche,by = "MktNametext")
 
