@@ -301,6 +301,7 @@ names(df_listDisponibilite1) <- nomd1
 #   mutate(variable ="Ya t-il des produits rares dans le marché") 
 # list2env(df_list, envir = .GlobalEnv)
 #Base disponibilité2
+Disponibilite2 <- Disponibilite2[-12]
 df_listDisponibilite2 <- map(Disponibilite2, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomd2 <- codebook %>% filter(rowname %in% Disponibilite2) %>% select(V1) %>% pull()
 nomd2 <- paste("DISPONIBILITE : Produits alimentaire de céréales rares",nomd2,sep = "/")
@@ -308,6 +309,7 @@ names(df_listDisponibilite2) <- nomd2
 # BaseDisponibilite2 <- map_df(df_listDisponibilite2, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Produits alimentaire de céréales rares")
 # Base disponibilité3
+Disponibilite3 <- Disponibilite3[-9]
 df_listDisponibilite3 <- map(Disponibilite3, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomd3 <- codebook %>% filter(rowname %in% Disponibilite3) %>% select(V1) %>% pull()
 nomd3 <- paste("DISPONIBILITE : Produits alimentaires Autres rares",nomd3,sep = "/")
@@ -315,6 +317,7 @@ names(df_listDisponibilite3) <- nomd3
 # BaseDisponibilite3 <- map_df(df_listDisponibilite3, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Produits alimentaires Autres rares")
 # Base disponibilité4
+Disponibilite4 <- Disponibilite4[-14]
 df_listDisponibilite4 <- map(Disponibilite4, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomd4 <- codebook %>% filter(rowname %in% Disponibilite4) %>% select(V1) %>% pull()
 nomd4 <- paste("DISPONIBILITE : Produits Non alimentaires  rares",nomd4,sep = "/")
@@ -336,6 +339,7 @@ names(df_listDisponibilite6) <- nomd6
 # BaseDisponibilite6 <- map_df(df_listDisponibilite6, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Les commerçants de ce marché ont-ils peur de manquer de stocks d'ici 1e semaine en ce qui concerne")
 # Base disponibilité7
+Disponibilite7 <- Disponibilite7[-12]
 df_listDisponibilite7 <- map(Disponibilite7, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomd7 <- codebook %>% filter(rowname %in% Disponibilite7) %>% select(V1) %>% pull()
 nomd7 <- paste("DISPONIBILITE : Manque de stocks de produits alimentaires de céréales d'ici une semaine",nomd7,sep = "/")
@@ -343,6 +347,7 @@ names(df_listDisponibilite7) <- nomd7
 # BaseDisponibilite7 <- map_df(df_listDisponibilite7, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Manque de stocks de produits alimentaires de céréales d'ici une semaine")
 ##   Base disponibilité8
+Disponibilite8 <- Disponibilite8[-9]
 df_listDisponibilite8 <- map(Disponibilite8, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomd8 <- codebook %>% filter(rowname %in% Disponibilite8) %>% select(V1) %>% pull()
 nomd8 <- paste("DISPONIBILITE : Manque de Stock d'autres produits alimentaires d'ici une semaine",nomd8,sep = "/")
@@ -350,9 +355,10 @@ names(df_listDisponibilite8) <- nomd8
 # BaseDisponibilite8 <- map_df(df_listDisponibilite8, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Manque de Stock d'autres produits alimentaires d'ici une semaine")
 # Base disponibilité9
+Disponibilite9 <- Disponibilite9[-14]
 df_listDisponibilite9 <- map(Disponibilite9, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomd9 <- codebook %>% filter(rowname %in% Disponibilite9) %>% select(V1) %>% pull()
-nomd9 <- paste("DISPONIBILITE : Manque de Stock de produits Nom alimentaires d'ici une semaine",nomd9,sep = "/")
+nomd9 <- paste("DISPONIBILITE : Manque de Stock de produits Non alimentaires d'ici une semaine",nomd9,sep = "/")
 names(df_listDisponibilite9) <- nomd9
 # BaseDisponibilite9 <- map_df(df_listDisponibilite9, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Manque de Stock de produits Nom alimentaires d'ici une semaine")
@@ -522,6 +528,7 @@ names(df_listPrix1) <- nomP1
 #   mutate(variable ="Y-a-t-il des produits dont le prix a fortement augmenté dans le dernier mois") 
 # list2env(df_list, envir = .GlobalEnv)
 #Base prix2
+Prix2 <- Prix2[-12]
 df_listPrix2 <- map(Prix2, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomP2 <- codebook %>% filter(rowname %in% Prix2) %>% select(V1) %>% pull()
 nomP2 <- paste("PRIX  : Prix produits Alimentaires de Céréales fortement augmenté",nomP2,sep = "/")
@@ -529,6 +536,7 @@ names(df_listPrix2) <- nomP2
 # BasePrix2 <- map_df(df_listPrix2, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Prix produits Alimentaires de Céréales fortement augmenté")
 # Base prix3
+Prix3 <- Prix3[-9]
 df_listPrix3 <- map(Prix3, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomP3 <- codebook %>% filter(rowname %in% Prix3) %>% select(V1) %>% pull()
 nomP3 <- paste("PRIX  : Prix produits Alimentaires Autres fortement augmenté",nomP3,sep = "/")
@@ -536,6 +544,7 @@ names(df_listPrix3) <- nomP3
 # BasePrix3 <- map_df(df_listPrix3, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Prix produits Alimentaires Autres fortement augmenté")
 # Base prix4
+Prix4 <- Prix4[-14]
 df_listPrix4 <- map(Prix4, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomP4 <- codebook %>% filter(rowname %in% Prix4) %>% select(V1) %>% pull()
 nomP4 <- paste("PRIX  : Prix produits Non Alimentaires fortement augmenté",nomP4,sep = "/")
@@ -557,6 +566,7 @@ names(df_listPrix6) <- nomP6
 # BasePrix6 <- map_df(df_listPrix6, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Les commerçants de ce marché peuvent-ils estimer le prix de la semaine prochaine pour")
 # Base prix7
+Prix7 <- Prix7[-12]
 df_listPrix7 <- map(Prix7, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomP7 <- codebook %>% filter(rowname %in% Prix7) %>% select(V1) %>% pull()
 nomP7 <- paste("PRIX  : Quels produits alimentaires de céréales n'estimeriez-vous pas  correctement",nomP7,sep = "/")
@@ -564,6 +574,7 @@ names(df_listPrix7) <- nomP7
 # BasePrix7 <- map_df(df_listPrix7, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Quels produits alimentaires de céréales n'estimeriez-vous pas  correctement")
 # Base prix8
+Prix8 <- Prix8[-9]
 df_listPrix8 <- map(Prix8, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomP8 <- codebook %>% filter(rowname %in% Prix8) %>% select(V1) %>% pull()
 nomP8 <- paste("PRIX  : Quels autres produits alimentaires n'estimeriez-vous pas correctement",nomP8,sep = "/")
@@ -571,6 +582,7 @@ names(df_listPrix8) <- nomP8
 # BasePrix8 <- map_df(df_listPrix8, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Quels autres produits alimentaires n'estimeriez-vous pas correctement")
 # Base prix9
+# Prix9 <- Prix9[-14]
 df_listPrix9 <- map(Prix9, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomP9 <- codebook %>% filter(rowname %in% Prix9) %>% select(V1) %>% pull()
 nomP9 <- paste("PRIX  : Quels autres produits non alimentaires n'estimeriez-vous pas correctement",nomP9,sep = "/")
