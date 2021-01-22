@@ -443,7 +443,6 @@ DisponibiliteMarche <- c(df_listDisponibilite1,df_listDisponibilite2,
                          df_listDisponibilite7,df_listDisponibilite8,
                          df_listDisponibilite9)
 
-
 # Prix --------------------------------------------------------------------
 # UOAPriceIncr_Gr-  -- Y-a-t-il des produits dont le prix a fortement augmenté dans le dernier mois
 # UOAPriceIncr_FCer-fc -- Prix produits Alimentaires de Céréales fortement augmenté
@@ -477,7 +476,7 @@ codebook$rowname <- str_replace(codebook$rowname,"TrdPriceStab_Gr.","TrdPriceSta
 codebook$rowname <- str_replace(codebook$rowname,"MktPriceStab_Gr.","MktPriceStab_Gr-")
 codebook$rowname <- str_replace(codebook$rowname,"UOAPriceUnstab_FCer.fc","UOAPriceUnstab_FCer-fc")
 codebook$rowname <- str_replace(codebook$rowname,"UOAPriceUnstab_FOth.fo","UOAPriceUnstab_FOth-fo")
-codebook$rowname <- str_replace(codebook$rowname,"UOAPriceUnstab_NF-nf","UOAPriceUnstab_NF-nf")
+codebook$rowname <- str_replace(codebook$rowname,"UOAPriceUnstab_NF.nf","UOAPriceUnstab_NF-nf")
 
 # toutes les variables
 colonne <- colnames(mfi_bissau)
@@ -582,7 +581,7 @@ names(df_listPrix8) <- nomP8
 # BasePrix8 <- map_df(df_listPrix8, ~as.data.frame(.x), .id = "id") %>% 
 #   mutate(variable = "Quels autres produits alimentaires n'estimeriez-vous pas correctement")
 # Base prix9
-# Prix9 <- Prix9[-14]
+Prix9 <- Prix9[-14]
 df_listPrix9 <- map(Prix9, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomP9 <- codebook %>% filter(rowname %in% Prix9) %>% select(V1) %>% pull()
 nomP9 <- paste("PRIX  : Quels autres produits non alimentaires n'estimeriez-vous pas correctement",nomP9,sep = "/")
@@ -667,6 +666,50 @@ PrixMarche <- c(df_listPrix1,df_listPrix2,df_listPrix3,
 
 
 # Résilience --------------------------------------------------------------
+# TrdResilStockout Considérant la demande de vos clients, votre stock actuel vous permet-il d'y répondre
+#                         pendant 1 semaine?
+# TrdResilLeadtime Si vous commandez chez votre fournisseur aujourd'hui, pensez-vous recevoir vos
+#                    produits en semaine?
+# TrdResilNodDens_Gr- La majorité de vos fournisseurs se trouvent-ils dans la même zone géographique pour
+# TrdResilNodDens_FCer-fc Plus précisement, pour quels produits Alimentaires de céréales la plupart de vos fournisseurs sont-ils
+#                         géographiquement situés au même endroit?
+# TrdResilNodDens_FOth-fo Plus précisement, pour quels autres produits Alimentaires la plupart de vos fournisseurs sont-ils
+#                         géographiquement situés au même endroit?
+# TrdResilNodDens_NF-nf  Plus précisement, pour quels produits non Alimentaires la plupart de vos fournisseurs sont-ils
+#                         géographiquement situés au même endroit?
+# TrdResilNodComplex_Gr- Avez-vous actuellement plus d'un fournisseur pour:
+# TrdResilNodComplex_FCer-fc  Plus précisement, pour quels produits alimentaires de céréals avez-vous actuellement UN SEUL (1)
+#                            fournisseur?:
+# TrdResilNodComplex_FOth-fo Plus précisement, pour quels autres produits produits avez-vous actuellement UN SEUL (1)
+#                            fournisseur?:
+# TrdResilNodComplex_NF-nf  Plus précisement, pour quels produits non alimentaires avez-vous actuellement UN SEUL (1)
+#                            fournisseur?
+# TrdResilNodCrit_Gr-  Votre entreprise compte-t-elle principalement sur un seul fournisseur pour:
+# TrdResilNodCrit_FCer-fc Plus précisément, pour quels produits alimentaires de céréales existe-t-il un seul fournisseur de qui dépend la
+#                          plupart de votre entreprise?:
+# 	TrdResilNodCrit_FOth-fo  Plus précisément, pour quels autres produits alimentaires existe-t-il un seul fournisseur de qui dépend la
+#                          plupart de votre entreprise?:
+# TrdResilNodCrit_NF-nf   Plus précisément, pour quels produits non alimentaires existe-t-il un seul fournisseur de qui dépend la
+#                          plupart de votre entreprise?:
+
+mfi_bissau <- mutate_at(mfi_bissau, 
+            vars(contains(c("TrdResilStockout","TrdResilLeadtime","TrdResilNodDens_Gr-",
+              "TrdResilNodDens_FCer-fc","TrdResilNodDens_FOth-fo","TrdResilNodDens_NF-nf",      
+            "TrdResilNodComplex_Gr-","TrdResilNodComplex_FCer-fc","TrdResilNodComplex_FOth-fo",
+            "TrdResilNodComplex_NF-nf","TrdResilNodCrit_Gr-","TrdResilNodCrit_FCer-fc",
+            "TrdResilNodCrit_FOth-fo","TrdResilNodCrit_NF-nf"
+                        ))), 
+                        funs(factor))
+
+mfi_bissau <- mutate_at(mfi_bissau, 
+  vars(contains(c("TrdResilStockout","TrdResilLeadtime","TrdResilNodDens_Gr-",
+                  "TrdResilNodDens_FCer-fc","TrdResilNodDens_FOth-fo","TrdResilNodDens_NF-nf",      
+                  "TrdResilNodComplex_Gr-","TrdResilNodComplex_FCer-fc","TrdResilNodComplex_FOth-fo",
+                  "TrdResilNodComplex_NF-nf","TrdResilNodCrit_Gr-","TrdResilNodCrit_FCer-fc",
+                  "TrdResilNodCrit_FOth-fo","TrdResilNodCrit_NF-nf"))),
+                        ~recode_factor(.,"0"="Non", "1"="Oui"))
+
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilStockout", "TrdResilStockout-")
 
 
 # Service -----------------------------------------------------------------
