@@ -709,8 +709,98 @@ mfi_bissau <- mutate_at(mfi_bissau,
                   "TrdResilNodCrit_FOth-fo","TrdResilNodCrit_NF-nf"))),
                         ~recode_factor(.,"0"="Non", "1"="Oui"))
 
-codebook$rowname <- str_replace(codebook$rowname,"TrdResilStockout", "TrdResilStockout-")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilStockout", "TrdResilStockout")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilLeadtime", "TrdResilLeadtime")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodDens_Gr.", "TrdResilNodDens_Gr-")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodDens_FCer.fc", "TrdResilNodDens_FCer-fc")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodDens_FOth.fo", "TrdResilNodDens_FOth-fo")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodDens_NF.nf", "TrdResilNodDens_NF-nf")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodComplex_Gr.", "TrdResilNodComplex_Gr-")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodComplex_FCer.fc", "TrdResilNodComplex_FCer-fc")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodComplex_FOth.fo", "TrdResilNodComplex_FOth-fo")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodComplex_NF.nf", "TrdResilNodComplex_NF-nf")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodCrit_Gr.", "TrdResilNodCrit_Gr-")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodCrit_FCer.fc", "TrdResilNodCrit_FCer-fc")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodCrit_FOth.fo", "TrdResilNodCrit_FOth-fo")
+codebook$rowname <- str_replace(codebook$rowname,"TrdResilNodCrit_NF.nf", "TrdResilNodCrit_NF-nf")
 
+# toutes les variables
+colonne <- colnames(mfi_bissau)
+
+# Création des différentes listes
+Resilience1 <- list()
+Resilience2 <- list()
+Resilience3 <- list()
+Resilience4 <- list()
+Resilience5 <- list()
+Resilience6 <- list()
+Resilience7 <- list()
+Resilience8 <- list()
+Resilience9 <- list()
+Resilience10 <- list()
+Resilience11 <- list()
+Resilience12 <- list()
+Resilience13 <- list()
+Resilience14 <- list()
+
+for (i in 1:length(colonne)) {
+  if(str_detect(colonne[i], "TrdResilStockout") ){
+    Resilience1 <- append(Resilience1, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilLeadtime")) {
+    Resilience2 <- append(Resilience2, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodDens_Gr-")) {
+    Resilience3 <- append(Resilience3, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodDens_FCer-fc")) {
+    Resilience4 <- append(Resilience4, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodDens_FOth-fo")) {
+    Resilience5 <- append(Resilience5, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodDens_NF-nf")) {
+    Resilience6 <- append(Resilience6, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodComplex_Gr-")) {
+    Resilience7 <- append(Resilience7, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodComplex_FCer-fc")) {
+    Resilience8 <- append(Resilience8, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodComplex_FOth-fo")) {
+    Resilience9 <- append(Resilience9, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodComplex_NF-nf")) {
+    Resilience10 <- append(Resilience10, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodCrit_Gr-")) {
+    Resilience11 <- append(Resilience11, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodCrit_FCer-fc")) {
+    Resilience12 <- append(Resilience12, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodCrit_FOth-fo")) {
+    Resilience13 <- append(Resilience13, colonne[i])
+  }
+  else if (str_detect(colonne[i], "TrdResilNodCrit_NF-nf")) {
+    Resilience14 <- append(Resilience14, colonne[i])
+  }
+}
+
+
+# Résilience au niveau Admin1 ---------------------------------------------
+
+# Base Résilience1
+df_listResilience1 <- map(Resilience1, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR1 <- codebook %>% filter(rowname %in% Resilience1) %>% select(V1) %>% pull()
+nomR1 <- paste("RESILIENCE  : ",nomR1,sep = "/")
+names(df_listResilience1) <- nomR1
+# Base Résilience2
+df_listResilience2 <- map(Resilience2, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR2 <- codebook %>% filter(rowname %in% Resilience2) %>% select(V1) %>% pull()
+nomR2 <- paste("RESILIENCE  : ",nomR2,sep = "/")
+names(df_listResilience2) <- nomR2
 
 # Service -----------------------------------------------------------------
 
