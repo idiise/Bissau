@@ -666,30 +666,30 @@ PrixMarche <- c(df_listPrix1,df_listPrix2,df_listPrix3,
 
 
 # Résilience --------------------------------------------------------------
-# TrdResilStockout Considérant la demande de vos clients, votre stock actuel vous permet-il d'y répondre
+#1 TrdResilStockout Considérant la demande de vos clients, votre stock actuel vous permet-il d'y répondre
 #                         pendant 1 semaine?
-# TrdResilLeadtime Si vous commandez chez votre fournisseur aujourd'hui, pensez-vous recevoir vos
+#2 TrdResilLeadtime Si vous commandez chez votre fournisseur aujourd'hui, pensez-vous recevoir vos
 #                    produits en semaine?
-# TrdResilNodDens_Gr- La majorité de vos fournisseurs se trouvent-ils dans la même zone géographique pour
-# TrdResilNodDens_FCer-fc Plus précisement, pour quels produits Alimentaires de céréales la plupart de vos fournisseurs sont-ils
+#3 TrdResilNodDens_Gr- La majorité de vos fournisseurs se trouvent-ils dans la même zone géographique pour
+#4 TrdResilNodDens_FCer-fc Plus précisement, pour quels produits Alimentaires de céréales la plupart de vos fournisseurs sont-ils
 #                         géographiquement situés au même endroit?
-# TrdResilNodDens_FOth-fo Plus précisement, pour quels autres produits Alimentaires la plupart de vos fournisseurs sont-ils
+#5 TrdResilNodDens_FOth-fo Plus précisement, pour quels autres produits Alimentaires la plupart de vos fournisseurs sont-ils
 #                         géographiquement situés au même endroit?
-# TrdResilNodDens_NF-nf  Plus précisement, pour quels produits non Alimentaires la plupart de vos fournisseurs sont-ils
+#6 TrdResilNodDens_NF-nf  Plus précisement, pour quels produits non Alimentaires la plupart de vos fournisseurs sont-ils
 #                         géographiquement situés au même endroit?
-# TrdResilNodComplex_Gr- Avez-vous actuellement plus d'un fournisseur pour:
-# TrdResilNodComplex_FCer-fc  Plus précisement, pour quels produits alimentaires de céréals avez-vous actuellement UN SEUL (1)
+#7 TrdResilNodComplex_Gr- Avez-vous actuellement plus d'un fournisseur pour:
+#8 TrdResilNodComplex_FCer-fc  Plus précisement, pour quels produits alimentaires de céréals avez-vous actuellement UN SEUL (1)
 #                            fournisseur?:
-# TrdResilNodComplex_FOth-fo Plus précisement, pour quels autres produits produits avez-vous actuellement UN SEUL (1)
+#9 TrdResilNodComplex_FOth-fo Plus précisement, pour quels autres produits produits avez-vous actuellement UN SEUL (1)
 #                            fournisseur?:
-# TrdResilNodComplex_NF-nf  Plus précisement, pour quels produits non alimentaires avez-vous actuellement UN SEUL (1)
+#10 TrdResilNodComplex_NF-nf  Plus précisement, pour quels produits non alimentaires avez-vous actuellement UN SEUL (1)
 #                            fournisseur?
-# TrdResilNodCrit_Gr-  Votre entreprise compte-t-elle principalement sur un seul fournisseur pour:
-# TrdResilNodCrit_FCer-fc Plus précisément, pour quels produits alimentaires de céréales existe-t-il un seul fournisseur de qui dépend la
+#11 TrdResilNodCrit_Gr-  Votre entreprise compte-t-elle principalement sur un seul fournisseur pour:
+#12 TrdResilNodCrit_FCer-fc Plus précisément, pour quels produits alimentaires de céréales existe-t-il un seul fournisseur de qui dépend la
 #                          plupart de votre entreprise?:
-# 	TrdResilNodCrit_FOth-fo  Plus précisément, pour quels autres produits alimentaires existe-t-il un seul fournisseur de qui dépend la
+# 13	TrdResilNodCrit_FOth-fo  Plus précisément, pour quels autres produits alimentaires existe-t-il un seul fournisseur de qui dépend la
 #                          plupart de votre entreprise?:
-# TrdResilNodCrit_NF-nf   Plus précisément, pour quels produits non alimentaires existe-t-il un seul fournisseur de qui dépend la
+#14 TrdResilNodCrit_NF-nf   Plus précisément, pour quels produits non alimentaires existe-t-il un seul fournisseur de qui dépend la
 #                          plupart de votre entreprise?:
 
 mfi_bissau <- mutate_at(mfi_bissau, 
@@ -801,6 +801,84 @@ df_listResilience2 <- map(Resilience2, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR2 <- codebook %>% filter(rowname %in% Resilience2) %>% select(V1) %>% pull()
 nomR2 <- paste("RESILIENCE  : ",nomR2,sep = "/")
 names(df_listResilience2) <- nomR2
+# Base Résilience3
+df_listResilience3 <- map(Resilience3, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR3 <- codebook %>% filter(rowname %in% Resilience3) %>% select(V1) %>% pull()
+nomR3 <- paste("RESILIENCE  : La majorité de vos fournisseurs se trouvent-ils dans la même zone géographique pour",nomR3,sep = "/")
+names(df_listResilience3) <- nomR3
+# Base Résilience4
+Resilience4 <- Resilience4[-12]
+df_listResilience4 <- map(Resilience4, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR4 <- codebook %>% filter(rowname %in% Resilience4) %>% select(V1) %>% pull()
+nomR4 <- paste("RESILIENCE  : Plus précisement, pour quels produits Alimentaires de céréales la plupart de vos fournisseurs sont-ils
+                       géographiquement situés au même endroit?",nomR4,sep = "/")
+names(df_listResilience4) <- nomR4
+# Base Résilience5
+Resilience5 <- Resilience5[-9]
+df_listResilience5 <- map(Resilience5, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR5 <- codebook %>% filter(rowname %in% Resilience5) %>% select(V1) %>% pull()
+nomR5 <- paste("RESILIENCE  : Plus précisement, pour quels autres produits Alimentaires la plupart de vos fournisseurs sont-ils
+                        géographiquement situés au même endroit?",nomR5,sep = "/")
+names(df_listResilience5) <- nomR5
+# Base Résilience6
+Resilience6 <- Resilience6[-14]
+df_listResilience6 <- map(Resilience6, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR6 <- codebook %>% filter(rowname %in% Resilience6) %>% select(V1) %>% pull()
+nomR6 <- paste("RESILIENCE  : Plus précisement, pour quels produits non Alimentaires la plupart de vos fournisseurs sont-ils
+                       géographiquement situés au même endroit?",nomR6,sep = "/")
+names(df_listResilience6) <- nomR6
+# Base Résilience7
+df_listResilience7 <- map(Resilience7, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR7 <- codebook %>% filter(rowname %in% Resilience7) %>% select(V1) %>% pull()
+nomR7 <- paste("RESILIENCE  : Avez-vous actuellement plus d'un fournisseur pour:",nomR7,sep = "/")
+names(df_listResilience7) <- nomR7
+# Base Résilience8
+Resilience8 <- Resilience8[-12]
+df_listResilience8 <- map(Resilience8, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR8 <- codebook %>% filter(rowname %in% Resilience8) %>% select(V1) %>% pull()
+nomR8 <- paste("RESILIENCE  : Plus précisement, pour quels produits alimentaires de céréals avez-vous actuellement UN SEUL (1)
+                            fournisseur?:",nomR8,sep = "/")
+names(df_listResilience8) <- nomR8
+# Base Résilience9
+Resilience9 <- Resilience9[-9]
+df_listResilience9 <- map(Resilience9, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR9 <- codebook %>% filter(rowname %in% Resilience9) %>% select(V1) %>% pull()
+nomR9 <- paste("RESILIENCE  : Plus précisement, pour quels autres produits produits avez-vous actuellement UN SEUL (1)
+                            fournisseur?:",nomR9,sep = "/")
+names(df_listResilience9) <- nomR9
+# Base Résilience10
+Resilience10 <- Resilience10[-14]
+df_listResilience10 <- map(Resilience10, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR10 <- codebook %>% filter(rowname %in% Resilience10) %>% select(V1) %>% pull()
+nomR10 <- paste("RESILIENCE  : Plus précisement, pour quels produits non alimentaires avez-vous actuellement UN SEUL (1)
+                           fournisseur?",nomR10,sep = "/")
+names(df_listResilience10) <- nomR10
+# Base Résilience11
+df_listResilience11 <- map(Resilience11, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR11 <- codebook %>% filter(rowname %in% Resilience11) %>% select(V1) %>% pull()
+nomR11 <- paste("RESILIENCE  : Votre entreprise compte-t-elle principalement sur un seul fournisseur pour:",nomR11,sep = "/")
+names(df_listResilience11) <- nomR11
+# Base Résilience12
+Resilience12 <- Resilience12[-12]
+df_listResilience12 <- map(Resilience12, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR12 <- codebook %>% filter(rowname %in% Resilience12) %>% select(V1) %>% pull()
+nomR12 <- paste("RESILIENCE  : Plus précisément, pour quels produits alimentaires de céréales existe-t-il un seul fournisseur de qui dépend la
+                         plupart de votre entreprise?:",nomR12,sep = "/")
+names(df_listResilience12) <- nomR12
+# Base Résilience13
+Resilience13 <- Resilience13[-9]
+df_listResilience13 <- map(Resilience13, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR13 <- codebook %>% filter(rowname %in% Resilience13) %>% select(V1) %>% pull()
+nomR13 <- paste("RESILIENCE  : Plus précisément, pour quels autres produits alimentaires existe-t-il un seul fournisseur de qui dépend la
+                         plupart de votre entreprise?:",nomR13,sep = "/")
+names(df_listResilience13) <- nomR13
+# Base Résilience14
+Resilience14 <- Resilience14[-14]
+df_listResilience14 <- map(Resilience14, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomR14 <- codebook %>% filter(rowname %in% Resilience14) %>% select(V1) %>% pull()
+nomR14 <- paste("RESILIENCE  : Plus précisément, pour quels produits non alimentaires existe-t-il un seul fournisseur de qui dépend la
+                         plupart de votre entreprise?:",nomR14,sep = "/")
+names(df_listResilience14) <- nomR14
 
 # Service -----------------------------------------------------------------
 
