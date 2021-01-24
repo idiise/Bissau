@@ -811,21 +811,21 @@ Resilience4 <- Resilience4[-12]
 df_listResilience4 <- map(Resilience4, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR4 <- codebook %>% filter(rowname %in% Resilience4) %>% select(V1) %>% pull()
 nomR4 <- paste("RESILIENCE  : Plus précisement, pour quels produits Alimentaires de céréales la plupart de vos fournisseurs sont-ils
-                       géographiquement situés au même endroit?",nomR4,sep = "/")
+ géographiquement situés au même endroit?",nomR4,sep = "/")
 names(df_listResilience4) <- nomR4
 # Base Résilience5
 Resilience5 <- Resilience5[-9]
 df_listResilience5 <- map(Resilience5, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR5 <- codebook %>% filter(rowname %in% Resilience5) %>% select(V1) %>% pull()
 nomR5 <- paste("RESILIENCE  : Plus précisement, pour quels autres produits Alimentaires la plupart de vos fournisseurs sont-ils
-                        géographiquement situés au même endroit?",nomR5,sep = "/")
+ géographiquement situés au même endroit?",nomR5,sep = "/")
 names(df_listResilience5) <- nomR5
 # Base Résilience6
 Resilience6 <- Resilience6[-14]
 df_listResilience6 <- map(Resilience6, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR6 <- codebook %>% filter(rowname %in% Resilience6) %>% select(V1) %>% pull()
 nomR6 <- paste("RESILIENCE  : Plus précisement, pour quels produits non Alimentaires la plupart de vos fournisseurs sont-ils
-                       géographiquement situés au même endroit?",nomR6,sep = "/")
+ géographiquement situés au même endroit?",nomR6,sep = "/")
 names(df_listResilience6) <- nomR6
 # Base Résilience7
 df_listResilience7 <- map(Resilience7, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
@@ -837,21 +837,21 @@ Resilience8 <- Resilience8[-12]
 df_listResilience8 <- map(Resilience8, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR8 <- codebook %>% filter(rowname %in% Resilience8) %>% select(V1) %>% pull()
 nomR8 <- paste("RESILIENCE  : Plus précisement, pour quels produits alimentaires de céréals avez-vous actuellement UN SEUL (1)
-                            fournisseur?:",nomR8,sep = "/")
+ fournisseur?:",nomR8,sep = "/")
 names(df_listResilience8) <- nomR8
 # Base Résilience9
 Resilience9 <- Resilience9[-9]
 df_listResilience9 <- map(Resilience9, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR9 <- codebook %>% filter(rowname %in% Resilience9) %>% select(V1) %>% pull()
 nomR9 <- paste("RESILIENCE  : Plus précisement, pour quels autres produits produits avez-vous actuellement UN SEUL (1)
-                            fournisseur?:",nomR9,sep = "/")
+ fournisseur?:",nomR9,sep = "/")
 names(df_listResilience9) <- nomR9
 # Base Résilience10
 Resilience10 <- Resilience10[-14]
 df_listResilience10 <- map(Resilience10, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR10 <- codebook %>% filter(rowname %in% Resilience10) %>% select(V1) %>% pull()
 nomR10 <- paste("RESILIENCE  : Plus précisement, pour quels produits non alimentaires avez-vous actuellement UN SEUL (1)
-                           fournisseur?",nomR10,sep = "/")
+ fournisseur?",nomR10,sep = "/")
 names(df_listResilience10) <- nomR10
 # Base Résilience11
 df_listResilience11 <- map(Resilience11, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
@@ -863,24 +863,196 @@ Resilience12 <- Resilience12[-12]
 df_listResilience12 <- map(Resilience12, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR12 <- codebook %>% filter(rowname %in% Resilience12) %>% select(V1) %>% pull()
 nomR12 <- paste("RESILIENCE  : Plus précisément, pour quels produits alimentaires de céréales existe-t-il un seul fournisseur de qui dépend la
-                         plupart de votre entreprise?:",nomR12,sep = "/")
+ plupart de votre entreprise?:",nomR12,sep = "/")
 names(df_listResilience12) <- nomR12
 # Base Résilience13
 Resilience13 <- Resilience13[-9]
 df_listResilience13 <- map(Resilience13, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR13 <- codebook %>% filter(rowname %in% Resilience13) %>% select(V1) %>% pull()
 nomR13 <- paste("RESILIENCE  : Plus précisément, pour quels autres produits alimentaires existe-t-il un seul fournisseur de qui dépend la
-                         plupart de votre entreprise?:",nomR13,sep = "/")
+ plupart de votre entreprise?:",nomR13,sep = "/")
 names(df_listResilience13) <- nomR13
 # Base Résilience14
 Resilience14 <- Resilience14[-14]
 df_listResilience14 <- map(Resilience14, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
 nomR14 <- codebook %>% filter(rowname %in% Resilience14) %>% select(V1) %>% pull()
 nomR14 <- paste("RESILIENCE  : Plus précisément, pour quels produits non alimentaires existe-t-il un seul fournisseur de qui dépend la
-                         plupart de votre entreprise?:",nomR14,sep = "/")
+ plupart de votre entreprise?:",nomR14,sep = "/")
 names(df_listResilience14) <- nomR14
 
+ResilienceAdmin1 <- c(df_listResilience1,df_listResilience2,df_listResilience3,
+                      df_listResilience4,df_listResilience5,df_listResilience6,
+                      df_listResilience7,df_listResilience8,df_listResilience9,
+                      df_listResilience10,df_listResilience11,df_listResilience12,
+                      df_listResilience13,df_listResilience14)
+
+# Résilience niveau Admin2 ------------------------------------------------
+# Base Résilience1
+df_listResilience1 <- map(Resilience1, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience1) <- nomR1
+# Base Résilience2
+df_listResilience2 <- map(Resilience2, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience2) <- nomR2
+# Base Résilience3
+df_listResilience3 <- map(Resilience3, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience3) <- nomR3
+# Base Résilience4
+df_listResilience4 <- map(Resilience4, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience4) <- nomR4
+# Base Résilience5
+df_listResilience5 <- map(Resilience5, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience5) <- nomR5
+# Base Résilience6
+df_listResilience6 <- map(Resilience6, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience6) <- nomR6
+# Base Résilience7
+df_listResilience7 <- map(Resilience7, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience7) <- nomR7
+# Base Résilience8
+df_listResilience8 <- map(Resilience8, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience8) <- nomR8
+# Base Résilience9
+df_listResilience9 <- map(Resilience9, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience9) <- nomR9
+# Base Résilience10
+df_listResilience10 <- map(Resilience10, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience10) <- nomR10
+# Base Résilience11
+df_listResilience11 <- map(Resilience11, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience11) <- nomR11
+# Base Résilience12
+df_listResilience12 <- map(Resilience12, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience12) <- nomR12
+# Base Résilience13
+df_listResilience13 <- map(Resilience13, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience13) <- nomR13
+# Base Résilience14
+df_listResilience14 <- map(Resilience14, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listResilience14) <- nomR14
+
+ResilienceAdmin2 <- c(df_listResilience1,df_listResilience2,df_listResilience3,
+                      df_listResilience4,df_listResilience5,df_listResilience6,
+                      df_listResilience7,df_listResilience8,df_listResilience9,
+                      df_listResilience10,df_listResilience11,df_listResilience12,
+                      df_listResilience13,df_listResilience14)
+
+
+# Resilience au niveau Marché ---------------------------------------------
+# Base Résilience1
+df_listResilience1 <- map(Resilience1, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience1) <- nomR1
+# Base Résilience2
+df_listResilience2 <- map(Resilience2, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience2) <- nomR2
+# Base Résilience3
+df_listResilience3 <- map(Resilience3, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience3) <- nomR3
+# Base Résilience4
+df_listResilience4 <- map(Resilience4, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience4) <- nomR4
+# Base Résilience5
+df_listResilience5 <- map(Resilience5, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience5) <- nomR5
+# Base Résilience6
+df_listResilience6 <- map(Resilience6, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience6) <- nomR6
+# Base Résilience7
+df_listResilience7 <- map(Resilience7, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience7) <- nomR7
+# Base Résilience8
+df_listResilience8 <- map(Resilience8, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience8) <- nomR8
+# Base Résilience9
+df_listResilience9 <- map(Resilience9, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience9) <- nomR9
+# Base Résilience10
+df_listResilience10 <- map(Resilience10, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience10) <- nomR10
+# Base Résilience11
+df_listResilience11 <- map(Resilience11, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience11) <- nomR11
+# Base Résilience12
+df_listResilience12 <- map(Resilience12, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience12) <- nomR12
+# Base Résilience13
+df_listResilience13 <- map(Resilience13, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience13) <- nomR13
+# Base Résilience14
+df_listResilience14 <- map(Resilience14, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listResilience14) <- nomR14
+
+ResilienceMarche <- c(df_listResilience1,df_listResilience2,df_listResilience3,
+                      df_listResilience4,df_listResilience5,df_listResilience6,
+                      df_listResilience7,df_listResilience8,df_listResilience9,
+                      df_listResilience10,df_listResilience11,df_listResilience12,
+                      df_listResilience13,df_listResilience14)
+
+
 # Service -----------------------------------------------------------------
+#1 	TrdServiceLoyalty Offrez-vous un programme de fidélité à vos clients réguliers? Réductions ou système de
+#        points à utiliser plus tard dans votre boutique?
+#2 TrdServicePos Cette boutique possède-t-elle un terminal de vente (POS)?
+#3 TrdServicePosAnalysis Analysez-vous les informations collectées par votre terminal de vente. Informations du
+#                  type, inventaire, catalogue de données? 
+
+mfi_bissau <- mutate_at(mfi_bissau, 
+                        vars(contains(c("TrdServiceLoyalty","TrdServicePos",
+                                        "TrdServicePosAnalysis"))), 
+                        funs(factor))
+
+mfi_bissau <- mutate_at(mfi_bissau, 
+                        vars(contains(c("TrdServiceLoyalty","TrdServicePos",
+                                        "TrdServicePosAnalysis"))),
+                        ~recode_factor(.,"0"="Non", "1"="Oui"))
+
+Service1 <- list("TrdServiceLoyalty")
+Service2 <- list("TrdServicePos")
+Service3 <- list("TrdServicePosAnalysis")
+
+
+# Service au Niveau Admin1 ------------------------------------------------
+
+df_listService1 <- map(Service1, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomS1 <- "SERVICE : TrdServiceLoyalty Offrez-vous un programme de fidélité à vos clients réguliers? Réductions ou système de
+ points à utiliser plus tard dans votre boutique?"
+names(df_listService1) <- nomS1
+
+df_listService2 <- map(Service2, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomS2 <- "SERVICE : Cette boutique possède-t-elle un terminal de vente (POS)?"
+names(df_listService2) <- nomS2
+
+df_listService3 <- map(Service3, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomS3 <- "SERVICE : Analysez-vous les informations collectées par votre terminal de vente. Informations du
+  type, inventaire, catalogue de données?"
+names(df_listService3) <- nomS3
+
+ServiceAdmin1 <- c(df_listService1,df_listService2,df_listService3)
+
+# Service au niveau Admin2 ------------------------------------------------
+df_listService1 <- map(Service1, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listService1) <- nomS1
+
+df_listService2 <- map(Service2, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listService2) <- nomS2
+
+df_listService3 <- map(Service3, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listService3) <- nomS3
+
+ServiceAdmin2 <- c(df_listService1,df_listService2,df_listService3)
+
+# Service au niveau maché -------------------------------------------------
+df_listService1 <- map(Service1, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listService1) <- nomS1
+
+df_listService2 <- map(Service2, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listService2) <- nomS2
+
+df_listService3 <- map(Service3, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listService3) <- nomS3
+
+ServiceMarche <- c(df_listService1,df_listService2,df_listService3)
+
+
 
 
 # Infrastructure ----------------------------------------------------------
@@ -898,11 +1070,11 @@ names(df_listResilience14) <- nomR14
 
 # regroupement des Base ----------------------------------------------------
 
-BaseAdmin1 <- c(AssortimentAdmin1,DisponibiliteAdmin1,PrixAdmin1)
+BaseAdmin1 <- c(AssortimentAdmin1,DisponibiliteAdmin1,PrixAdmin1, ResilienceAdmin1,ServiceAdmin1)
 
-BaseAdmin2 <- c(AssortimentAdmin2, DisponibiliteAdmin2,PrixAdmin2)
+BaseAdmin2 <- c(AssortimentAdmin2, DisponibiliteAdmin2,PrixAdmin2,ResilienceAdmin2,ServiceAdmin2)
 
-BaseMarche <- c(AssortimentMarche, DisponibiliteMarche, PrixMarche)
+BaseMarche <- c(AssortimentMarche, DisponibiliteMarche, PrixMarche,ResilienceMarche,ServiceMarche)
 
 
 # Admin1
