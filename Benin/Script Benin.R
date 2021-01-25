@@ -18,7 +18,7 @@ library(openxlsx)
 
 mfi_Benin <- read.csv("Benin/mfi_beta_1_2021_01_21_11_42_03_960985-group-name-removed.csv")%>% rename(
   Admin1NAME = TrdNodDensLocNameAdm1, Admin2NAME = TrdNodDensLocNameAdm2)
-marche_benin <- read_xlsx("Benin/marche.xlsx")
+# marche_benin <- read_xlsx("Benin/marche.xlsx")
 
 spss <- read_sav("data_mfi_beta.sav")
 spss <- to_factor(spss)
@@ -600,13 +600,13 @@ for (i in 1:length(colonne)) {
   else if (str_detect(colonne[i], "TrdResilNodComplex_FOth.fo")) {
     Resilience9 <- append(Resilience9, colonne[i])
   }
-  else if (str_detect(colonne[i], "TrdResilNodComplex_NF-nf")) {
+  else if (str_detect(colonne[i], "TrdResilNodComplex_NF.nf")) {
     Resilience10 <- append(Resilience10, colonne[i])
   }
   else if (str_detect(colonne[i], "TrdResilNodCrit_Gr.")) {
     Resilience11 <- append(Resilience11, colonne[i])
   }
-  else if (str_detect(colonne[i], "TrdResilNodCrit_FCer-fc")) {
+  else if (str_detect(colonne[i], "TrdResilNodCrit_FCer.fc")) {
     Resilience12 <- append(Resilience12, colonne[i])
   }
   else if (str_detect(colonne[i], "TrdResilNodCrit_FOth.fo")) {
@@ -806,6 +806,62 @@ ResilienceMarche <- c(df_listResilience1,df_listResilience2,df_listResilience3,
                       df_listResilience13,df_listResilience14)
 # Service -----------------------------------------------------------------
 
+mfi_bissau <- mutate_at(mfi_bissau, 
+                        vars(contains(c("TrdServiceLoyalty","TrdServicePos",
+                                        "TrdServicePosAnalysis"))), 
+                        funs(factor))
+
+mfi_bissau <- mutate_at(mfi_bissau, 
+                        vars(contains(c("TrdServiceLoyalty","TrdServicePos",
+                                        "TrdServicePosAnalysis"))),
+                        ~recode_factor(.,"0"="Non", "1"="Oui"))
+
+Service1 <- list("TrdServiceLoyalty")
+Service2 <- list("TrdServicePos")
+Service3 <- list("TrdServicePosAnalysis")
+
+
+# Service au Niveau Admin1 ------------------------------------------------
+
+df_listService1 <- map(Service1, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomS1 <- "SERVICE : TrdServiceLoyalty Offrez-vous un programme de fidélité à vos clients réguliers? Réductions ou système de
+ points à utiliser plus tard dans votre boutique?"
+names(df_listService1) <- nomS1
+
+df_listService2 <- map(Service2, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomS2 <- "SERVICE : Cette boutique possède-t-elle un terminal de vente (POS)?"
+names(df_listService2) <- nomS2
+
+df_listService3 <- map(Service3, ~ tableauAdmin1(mfi_bissau, !!sym(.x)))
+nomS3 <- "SERVICE : Analysez-vous les informations collectées par votre terminal de vente. Informations du
+  type, inventaire, catalogue de données?"
+names(df_listService3) <- nomS3
+
+ServiceAdmin1 <- c(df_listService1,df_listService2,df_listService3)
+
+# Service au niveau Admin2 ------------------------------------------------
+df_listService1 <- map(Service1, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listService1) <- nomS1
+
+df_listService2 <- map(Service2, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listService2) <- nomS2
+
+df_listService3 <- map(Service3, ~ tableauAdmin2(mfi_bissau, !!sym(.x)))
+names(df_listService3) <- nomS3
+
+ServiceAdmin2 <- c(df_listService1,df_listService2,df_listService3)
+
+# Service au niveau maché -------------------------------------------------
+df_listService1 <- map(Service1, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listService1) <- nomS1
+
+df_listService2 <- map(Service2, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listService2) <- nomS2
+
+df_listService3 <- map(Service3, ~ tableauMarche(mfi_bissau, !!sym(.x)))
+names(df_listService3) <- nomS3
+
+ServiceMarche <- c(df_listService1,df_listService2,df_listService3)
 
 # Infrastructure ----------------------------------------------------------
 
@@ -822,11 +878,11 @@ ResilienceMarche <- c(df_listResilience1,df_listResilience2,df_listResilience3,
 
 # regroupement des Base ----------------------------------------------------
 
-BaseAdmin1 <- c(AssortimentAdmin1,DisponibiliteAdmin1,PrixAdmin1)
+BaseAdmin1 <- c(AssortimentAdmin1,DisponibiliteAdmin1,PrixAdmin1,ResilienceAdmin1,ServiceAdmin1)
 
-BaseAdmin2 <- c(AssortimentAdmin2, DisponibiliteAdmin2,PrixAdmin2)
+BaseAdmin2 <- c(AssortimentAdmin2, DisponibiliteAdmin2,PrixAdmin2,ResilienceAdmin2,ServiceAdmin2)
 
-BaseMarche <- c(AssortimentMarche, DisponibiliteMarche, PrixMarche)
+BaseMarche <- c(AssortimentMarche, DisponibiliteMarche, PrixMarche,ResilienceMarche,ServiceMarche)
 
 
 # Admin1
